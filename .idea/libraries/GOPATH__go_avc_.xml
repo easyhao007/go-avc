@@ -7,7 +7,6 @@
       <root url="file://$PROJECT_DIR$/../github.com" />
       <root url="file://$PROJECT_DIR$/../go-oryx" />
       <root url="file://$PROJECT_DIR$/../ts_info" />
-      <root url="file://$PROJECT_DIR$/../awesomeProject" />
       <root url="file://$PROJECT_DIR$/../grs" />
     </CLASSES>
     <SOURCES>
@@ -17,7 +16,6 @@
       <root url="file://$PROJECT_DIR$/../github.com" />
       <root url="file://$PROJECT_DIR$/../go-oryx" />
       <root url="file://$PROJECT_DIR$/../ts_info" />
-      <root url="file://$PROJECT_DIR$/../awesomeProject" />
       <root url="file://$PROJECT_DIR$/../grs" />
     </SOURCES>
     <excluded>

@@ -1,10 +1,13 @@
 package main
 
 import (
-"fmt"
+	"fmt"
+	"go-avc/avc"
 )
 
-func main(){
+func main() {
 	fmt.Println("h264结构分析学习:")
-}
 
+	nal := avc.NewAvcNalUnit()
+	nal.StartAnalyze("D:\\video\\aFanDa.h264")
+}
