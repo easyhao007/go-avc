@@ -42,25 +42,14 @@ type AvcHeader struct {
 
 func (head *AvcHeader) demux(buf []uint8) (err error) {
 	//设置缓存
-	head.buf.Set(buf)
 	//解析数据
-	head.ForBiddenZeroBit, err = head.buf.PeekUint8(1)
-	if err != nil {
-		return err
-	}
+	head.ForBiddenZeroBit = buf[0] & 0x80		// 0x80 = 10000000
 	if head.ForBiddenZeroBit != 0 {
 		err = errors.New("head.ForBiddenZeroBit 不等于0 , buff")
 	}
 
-	head.NalRefIdc, err = head.buf.PeekUint8(2)
-	if err != nil {
-		return err
-	}
-
-	head.NalUnitType, err = head.buf.PeekUint8(5)
-	if err != nil {
-		return err
-	}
+	head.NalRefIdc = buf[0] & 0x60
+	head.NalUnitType = buf[0] & 0x1F
 
 	switch head.NalUnitType {
 	case NalUintTypeUnuse:

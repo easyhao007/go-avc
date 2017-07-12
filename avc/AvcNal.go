@@ -1,7 +1,7 @@
 package avc
 
 import (
-	"encoding/hex"
+	//"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -50,36 +50,43 @@ func (nal *AvcNalUnit) StartAnalyze(filename string) (err error) {
 		return err
 	}
 
-	fmt.Println(hex.Dump(buf))
-
-	fileLen := len(buf)
-	index := 0
-
-	findStartCode := false
-
-	for {
-		if nal.FindStartCode2(buf[index : index+3]) {
-			findStartCode = true
-			index += 3
-		} else {
-			if nal.FindStartCode3(buf[index : index+4]) {
-				findStartCode = true
-				index += 4
+	head , tail , startLen := 0 , 0 , 0
+	index := 1
+	for i:= 0 ; i < len(buf) ; i++{
+		if buf[i] == 0 && buf[i+1] == 0 && buf[i+2] == 1{
+			//find 0x000001
+			if head == 0{
+				head = i + 3
+				i = i + 3
+			}else {
+				tail = i
+				i = i + 3
+				startLen = 3
+			}
+		}else if buf[i] == 0 && buf[i+1] == 0 && buf[i+2] == 0 && buf[i+3] == 1{
+			//find 0x00000001
+			if head == 0{
+				head = i + 4
+				i = i + 4
+			}else {
+				tail = i
+				i = i + 4
+				startLen = 4
 			}
 		}
-
-		if findStartCode {
-			err = nal.header.demux(buf[index:])
-			if err != nil {
-				fmt.Println("demux header error , error info is ", err.Error())
-				break
+		if head != 0 && tail != 0{
+			fmt.Printf("index:%d" , index)
+			//fmt.Println(hex.Dump(buf[head:tail]))
+			err := nal.header.demux(buf[head:tail])
+			if err != nil{
+				fmt.Println("demux the nal faild")
 			}
+			head = tail + startLen
+			tail = 0
 			index++
 		}
-		index++
-		if index >= fileLen {
-			break
-		}
 	}
+
+
 	return nil
 }
